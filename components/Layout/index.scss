@@ -1,0 +1,28 @@
+@import
+ "~bootstrap/scss/functions";
+@import
+ "~bootstrap/scss/variables";
+@import
+ "~bootstrap/scss/mixins/_breakpoints";
+@import
+ "~bootstrap/scss/bootstrap";
+
+body {
+  margin: 0;
+  font-family: Montserrat;
+}
+
+.layout-header {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  background-color: #eaf9d9;
+  padding: 20px;
+}
+
+.layout-body {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
