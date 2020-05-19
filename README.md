@@ -1,9 +1,20 @@
-## Memory card game
+# Matching cards
 
-The idea of this project was taken from the [app ideas collection](https://github.com/florinpop17/app-ideas) started by Florin Pop . 
-The complete description is [here](https://github.com/florinpop17/app-ideas/blob/master/Projects/2-Intermediate/Card-Memory-Game.md)
+## Introduction
 
+This is a matching game. Player is presented with 16 cards faced down composed of 8 pairs, all faced down. Player turns over two cards at a time, with the goal of turning over a matching pair, by using his memory. Why this project? I wanted to have fun, while creating something for my portfolio.
 
+##Technologies
 
+- Next
+- React + Typescript
+- scss
+- eslint
+- prettier
+- Netlify for hosting
 
-> Written with [StackEdit](https://stackedit.io/).
+##Live demo
+
+##Project status
+
+Pending to add some more details to the score and reset the status of the game once it's finished.

@@ -1,14 +1,14 @@
 /* eslint-disable no-plusplus */
-import React, { Component } from 'react';
-import shuffle from 'lodash.shuffle';
-import CardModel from '../../types/CardModel';
-import GameStatusNames from '../../types/GameStatus';
-import GameCardList from '../GameCardList/index';
-import Layout from '../Layout/index';
-import './index.scss';
-import CardStatus from '../../types/CardStatus';
-import Score from '../Score';
-import ModalStartGame from '../ModalStartGame/index';
+import React, { Component } from "react";
+import shuffle from "lodash.shuffle";
+import CardModel from "../../types/CardModel";
+import GameStatusNames from "../../types/GameStatus";
+import GameCardList from "../GameCardList/index";
+import Layout from "../Layout/index";
+import "./index.scss";
+import CardStatus from "../../types/CardStatus";
+import Score from "../Score";
+import ModalStartGame from "../ModalStartGame/index";
 
 interface State {
   cardDeck: CardModel[];
@@ -28,7 +28,7 @@ export default class Game extends Component<object, State> {
     this.state = {
       cardDeck: [],
       gameState: GameStatusNames.intro,
-      modalVisible: true,
+      modalVisible: false,
     };
     this.firstSelectedCardId = null;
     this.secondSelectedCardId = null;
@@ -44,13 +44,15 @@ export default class Game extends Component<object, State> {
       cardDeck: this.buildCardDeck(),
       gameState: GameStatusNames.waitingFirstCardSelection,
     });
-  }
+  };
 
   handleGameCardClick = (idCard: number) => {
     const { gameState } = this.state;
 
-    if (gameState !== GameStatusNames.waitingFirstCardSelection
-      && gameState !== GameStatusNames.waitingSecondCardSelection) {
+    if (
+      gameState !== GameStatusNames.waitingFirstCardSelection &&
+      gameState !== GameStatusNames.waitingSecondCardSelection
+    ) {
       return;
     }
 
@@ -65,7 +67,7 @@ export default class Game extends Component<object, State> {
     } else if (gameState === GameStatusNames.waitingSecondCardSelection) {
       this.handleStateForSecondCardSelected();
     }
-  }
+  };
 
   handleStateAfterEndOfTurn = () => {
     this.firstSelectedCardId = null;
@@ -75,21 +77,27 @@ export default class Game extends Component<object, State> {
       if (prevState.gameState === GameStatusNames.cardsDontMatch) {
         updatedCards = this.hideVisibleCards(updatedCards);
       }
+      let gameState =
+        this.score === prevState.cardDeck.length
+          ? GameStatusNames.end
+          : GameStatusNames.waitingFirstCardSelection;
       return {
         cardDeck: updatedCards,
-        gameState: GameStatusNames.waitingFirstCardSelection,
+        gameState,
       };
     });
-  }
+  };
 
   hideVisibleCards = (cards: CardModel[]) => {
     const cardsUpdated = [...cards];
     for (let index = 0; index < cardsUpdated.length; index++) {
-      cardsUpdated[index].status = cardsUpdated[index].status === CardStatus.visible 
-        ? CardStatus.hidden : cardsUpdated[index].status;
+      cardsUpdated[index].status =
+        cardsUpdated[index].status === CardStatus.visible
+          ? CardStatus.hidden
+          : cardsUpdated[index].status;
     }
     return cardsUpdated;
-  }
+  };
 
   updateCardStateForSelectedCards = (
     selectedCardIds: (number | null)[],
@@ -103,27 +111,33 @@ export default class Game extends Component<object, State> {
       }
     });
     return currentCards;
-  }
+  };
 
   cardPairIsMatching = (cards: CardModel[]) => {
-    if (this.firstSelectedCardId !== null && this.secondSelectedCardId !== null) {
-      return cards[this.firstSelectedCardId].idImage === cards[this.secondSelectedCardId].idImage;
+    if (
+      this.firstSelectedCardId !== null &&
+      this.secondSelectedCardId !== null
+    ) {
+      return (
+        cards[this.firstSelectedCardId].idImage ===
+        cards[this.secondSelectedCardId].idImage
+      );
     }
     return false;
-  }
+  };
 
   getImagesUrl = () => {
     return [
-      'https://cdn.pixabay.com/photo/2016/06/19/07/40/pig-1466275_960_720.jpg',
-      'https://cdn.pixabay.com/photo/2015/01/30/09/35/animals-617305_640.jpg',
-      'https://images.pexels.com/photos/56847/lion-panthera-leo-lioness-animal-world-56847.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'https://cdn.pixabay.com/photo/2018/07/31/22/08/lion-3576045_1280.jpg',
-      'https://cdn.pixabay.com/photo/2017/01/14/12/59/iceland-1979445_1280.jpg',
-      'https://cdn.pixabay.com/photo/2016/12/05/11/39/fox-1883658_1280.jpg',
-      'https://cdn.pixabay.com/photo/2017/10/20/10/58/elephant-2870777_1280.jpg',
-      'https://cdn.pixabay.com/photo/2014/08/29/03/02/horse-430441_1280.jpg',
+      "https://cdn.pixabay.com/photo/2016/06/19/07/40/pig-1466275_960_720.jpg",
+      "https://cdn.pixabay.com/photo/2015/01/30/09/35/animals-617305_640.jpg",
+      "https://images.pexels.com/photos/56847/lion-panthera-leo-lioness-animal-world-56847.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "https://cdn.pixabay.com/photo/2018/07/31/22/08/lion-3576045_1280.jpg",
+      "https://cdn.pixabay.com/photo/2017/01/14/12/59/iceland-1979445_1280.jpg",
+      "https://cdn.pixabay.com/photo/2016/12/05/11/39/fox-1883658_1280.jpg",
+      "https://cdn.pixabay.com/photo/2017/10/20/10/58/elephant-2870777_1280.jpg",
+      "https://cdn.pixabay.com/photo/2014/08/29/03/02/horse-430441_1280.jpg",
     ];
-  }
+  };
 
   buildCardDeck = () => {
     const images = this.getImagesUrl();
@@ -134,12 +148,11 @@ export default class Game extends Component<object, State> {
       cardDeck[index].idCard = index;
     }
     return cardDeck;
-  }
-
+  };
 
   handleStartGameButton = () => {
     this.setState({ modalVisible: false });
-  }
+  };
 
   private handleStateForSecondCardSelected() {
     this.setState((prevState) => {
@@ -148,18 +161,23 @@ export default class Game extends Component<object, State> {
       if (cardPairIsMatching) {
         updatedCards = this.updateCardStateForSelectedCards(
           [this.firstSelectedCardId, this.secondSelectedCardId],
-          prevState.cardDeck, CardStatus.matched
+          prevState.cardDeck,
+          CardStatus.matched
         );
         this.score += 2;
       } else {
         updatedCards = this.updateCardStateForSelectedCards(
-          [this.secondSelectedCardId], prevState.cardDeck, CardStatus.visible
+          [this.secondSelectedCardId],
+          prevState.cardDeck,
+          CardStatus.visible
         );
       }
-      setTimeout(this.handleStateAfterEndOfTurn, 2000);
+      setTimeout(this.handleStateAfterEndOfTurn, 1000);
       return {
         cardDeck: updatedCards,
-        gameState: cardPairIsMatching ? GameStatusNames.cardsMatch : GameStatusNames.cardsDontMatch,
+        gameState: cardPairIsMatching
+          ? GameStatusNames.cardsMatch
+          : GameStatusNames.cardsDontMatch,
       };
     });
   }
@@ -167,7 +185,10 @@ export default class Game extends Component<object, State> {
   private handleStateForFirstCardSelected() {
     this.setState((prevState) => {
       const updatedCards = this.updateCardStateForSelectedCards(
-        [this.firstSelectedCardId], prevState.cardDeck, CardStatus.visible);
+        [this.firstSelectedCardId],
+        prevState.cardDeck,
+        CardStatus.visible
+      );
       return {
         cardDeck: updatedCards,
         gameState: GameStatusNames.waitingSecondCardSelection,
@@ -183,14 +204,15 @@ export default class Game extends Component<object, State> {
           handleStartGameButton={this.handleStartGameButton}
           modalIsOpen={modalVisible}
         />
-        <Score score={this.score} totalCards={cardDeck.length} />
-        <GameCardList cardInfoList={cardDeck} handleGameCardClick={this.handleGameCardClick} />
-        {gameState === GameStatusNames.cardsMatch && (
-          <div>Jolines, bien hecho!!</div>
-        )}
-        {gameState === GameStatusNames.cardsDontMatch && (
-          <div>Gilipollas, intenta otra vez!!</div>
-        )}
+        <Score
+          score={this.score}
+          totalCards={cardDeck.length}
+          isGameFinished={gameState === GameStatusNames.end}
+        />
+        <GameCardList
+          cardInfoList={cardDeck}
+          handleGameCardClick={this.handleGameCardClick}
+        />
       </Layout>
     );
   }
