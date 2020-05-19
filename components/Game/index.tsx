@@ -8,7 +8,6 @@ import Layout from "../Layout/index";
 import "./index.scss";
 import CardStatus from "../../types/CardStatus";
 import Score from "../Score";
-import ModalStartGame from "../ModalStartGame/index";
 
 interface State {
   cardDeck: CardModel[];
@@ -200,10 +199,6 @@ export default class Game extends Component<object, State> {
     const { cardDeck, gameState, modalVisible } = this.state;
     return (
       <Layout>
-        <ModalStartGame
-          handleStartGameButton={this.handleStartGameButton}
-          modalIsOpen={modalVisible}
-        />
         <Score
           score={this.score}
           totalCards={cardDeck.length}

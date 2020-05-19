@@ -15,6 +15,8 @@ This is a matching game. Player is presented with 16 cards faced down composed o
 
 ## Live demo
 
+https://fervent-ride-9fef59.netlify.app
+
 ## Project status
 
 Pending to add some more details to the score and reset the status of the game once it's finished.
