@@ -12,7 +12,7 @@ import Score from "../Score";
 interface State {
   cardDeck: CardModel[];
   gameState: GameStatusNames;
-  modalVisible: boolean;
+  gameTimer: number;
 }
 
 export default class Game extends Component<object, State> {
@@ -22,16 +22,22 @@ export default class Game extends Component<object, State> {
 
   score: number;
 
+  isFirstMove: boolean;
+
+  gameTimerReference: number;
+
   constructor(props: object) {
     super(props);
     this.state = {
       cardDeck: [],
       gameState: GameStatusNames.intro,
-      modalVisible: false,
+      gameTimer: 0,
     };
     this.firstSelectedCardId = null;
     this.secondSelectedCardId = null;
     this.score = 0;
+    this.isFirstMove = false;
+    this.gameTimerReference = 0;
   }
 
   componentDidMount() {
@@ -79,11 +85,18 @@ export default class Game extends Component<object, State> {
         this.score === prevState.cardDeck.length
           ? GameStatusNames.end
           : GameStatusNames.waitingFirstCardSelection;
+      this.clearIfGameStatusIsEnd(gameState);
       return {
         cardDeck: updatedCards,
         gameState,
       };
     });
+  };
+
+  clearIfGameStatusIsEnd = (newGameState: GameStatusNames) => {
+    if (newGameState === GameStatusNames.end) {
+      clearInterval(this.gameTimerReference);
+    }
   };
 
   hideVisibleCards = (cards: CardModel[]) => {
@@ -145,12 +158,7 @@ export default class Game extends Component<object, State> {
     for (let index = 0; index < cardDeck.length; index++) {
       cardDeck[index].idCard = index;
     }
-    debugger;
     return cardDeck;
-  };
-
-  handleStartGameButton = () => {
-    this.setState({ modalVisible: false });
   };
 
   private handleStateForSecondCardSelected() {
@@ -181,7 +189,22 @@ export default class Game extends Component<object, State> {
     });
   }
 
+  updateGameTimer = () => {
+    this.setState((prevState) => ({
+      gameTimer: prevState.gameTimer + 1,
+    }));
+  };
+
+  startGameTimerIfFirstMove = () => {
+    if (!this.isFirstMove) {
+      this.gameTimerReference = window.setInterval(this.updateGameTimer, 1000);
+      this.isFirstMove = true;
+    }
+  };
+
   private handleStateForFirstCardSelected() {
+    this.startGameTimerIfFirstMove();
+
     this.setState((prevState) => {
       const updatedCards = this.updateCardStateForSelectedCards(
         [this.firstSelectedCardId],
@@ -196,13 +219,14 @@ export default class Game extends Component<object, State> {
   }
 
   render() {
-    const { cardDeck, gameState, modalVisible } = this.state;
+    const { cardDeck, gameState, gameTimer } = this.state;
     return (
       <Layout>
         <Score
           score={this.score}
           totalCards={cardDeck.length}
           isGameFinished={gameState === GameStatusNames.end}
+          gameTimer={gameTimer}
         />
         <GameCardList
           cardInfoList={cardDeck}

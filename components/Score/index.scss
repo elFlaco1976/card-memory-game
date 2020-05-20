@@ -3,4 +3,9 @@
   justify-content: center;
   margin: 10px 7px 0px;
   font-size: 20px;
+
+  .score-item {
+    flex-basis: 20%;
+    text-align: center;
+  }
 }
