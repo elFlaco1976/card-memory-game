@@ -9,24 +9,23 @@
   .image-wrap {
     width: 100px;
     height: 100px;
-    background-color: black;    
+    background-color: black;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border-radius: 5%;
-    color: #FFF;
-    font-family: 'Josefin Sans';
+    color: #fff;
+    font-family: "Josefin Sans";
     font-size: 10rem;
     position: relative;
-  
+
     img {
       width: 100%;
     }
 
     .game-name-letter {
       position: absolute;
+      line-height: 0;
     }
   }
-
 }
-

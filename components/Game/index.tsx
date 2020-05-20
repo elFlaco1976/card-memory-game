@@ -47,7 +47,6 @@ export default class Game extends Component<object, State> {
 
   handleGameCardClick = (idCard: number) => {
     const { gameState } = this.state;
-
     if (
       gameState !== GameStatusNames.waitingFirstCardSelection &&
       gameState !== GameStatusNames.waitingSecondCardSelection
@@ -146,6 +145,7 @@ export default class Game extends Component<object, State> {
     for (let index = 0; index < cardDeck.length; index++) {
       cardDeck[index].idCard = index;
     }
+    debugger;
     return cardDeck;
   };
 
