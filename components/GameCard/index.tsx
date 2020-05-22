@@ -13,10 +13,10 @@ const handleClick = (
   cardInfo: CardModel,
   parentHandler: (idCard: number) => void
 ) => {
-  if (
+  const cardCanNotBePlayed =
     cardInfo.status === CardStatus.visible ||
-    cardInfo.status === CardStatus.matched
-  ) {
+    cardInfo.status === CardStatus.matched;
+  if (cardCanNotBePlayed) {
     return;
   }
   parentHandler(cardInfo.idCard);

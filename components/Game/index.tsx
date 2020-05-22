@@ -8,6 +8,7 @@ import Layout from "../Layout/index";
 import "./index.scss";
 import CardStatus from "../../types/CardStatus";
 import Score from "../Score";
+import { getImagesUrl } from "../../utils/images";
 
 interface State {
   cardDeck: CardModel[];
@@ -53,10 +54,10 @@ export default class Game extends Component<object, State> {
 
   handleGameCardClick = (idCard: number) => {
     const { gameState } = this.state;
-    if (
+    const gameNotWaitingForCardSelection =
       gameState !== GameStatusNames.waitingFirstCardSelection &&
-      gameState !== GameStatusNames.waitingSecondCardSelection
-    ) {
+      gameState !== GameStatusNames.waitingSecondCardSelection;
+    if (gameNotWaitingForCardSelection) {
       return;
     }
 
@@ -137,21 +138,8 @@ export default class Game extends Component<object, State> {
     return false;
   };
 
-  getImagesUrl = () => {
-    return [
-      "https://cdn.pixabay.com/photo/2016/06/19/07/40/pig-1466275_960_720.jpg",
-      "https://cdn.pixabay.com/photo/2015/01/30/09/35/animals-617305_640.jpg",
-      "https://images.pexels.com/photos/56847/lion-panthera-leo-lioness-animal-world-56847.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      "https://cdn.pixabay.com/photo/2018/07/31/22/08/lion-3576045_1280.jpg",
-      "https://cdn.pixabay.com/photo/2017/01/14/12/59/iceland-1979445_1280.jpg",
-      "https://cdn.pixabay.com/photo/2016/12/05/11/39/fox-1883658_1280.jpg",
-      "https://cdn.pixabay.com/photo/2017/10/20/10/58/elephant-2870777_1280.jpg",
-      "https://cdn.pixabay.com/photo/2014/08/29/03/02/horse-430441_1280.jpg",
-    ];
-  };
-
   buildCardDeck = () => {
-    const images = this.getImagesUrl();
+    const images = getImagesUrl();
     const firstHalf = images.map((img, index) => new CardModel(img, index, 0));
     const secondHalf = images.map((img, index) => new CardModel(img, index, 0));
     const cardDeck = shuffle([...firstHalf, ...secondHalf]);
@@ -159,6 +147,19 @@ export default class Game extends Component<object, State> {
       cardDeck[index].idCard = index;
     }
     return cardDeck;
+  };
+
+  updateGameTimer = () => {
+    this.setState((prevState) => ({
+      gameTimer: prevState.gameTimer + 1,
+    }));
+  };
+
+  startGameTimerIfFirstMove = () => {
+    if (!this.isFirstMove) {
+      this.gameTimerReference = window.setInterval(this.updateGameTimer, 1000);
+      this.isFirstMove = true;
+    }
   };
 
   private handleStateForSecondCardSelected() {
@@ -188,19 +189,6 @@ export default class Game extends Component<object, State> {
       };
     });
   }
-
-  updateGameTimer = () => {
-    this.setState((prevState) => ({
-      gameTimer: prevState.gameTimer + 1,
-    }));
-  };
-
-  startGameTimerIfFirstMove = () => {
-    if (!this.isFirstMove) {
-      this.gameTimerReference = window.setInterval(this.updateGameTimer, 1000);
-      this.isFirstMove = true;
-    }
-  };
 
   private handleStateForFirstCardSelected() {
     this.startGameTimerIfFirstMove();
