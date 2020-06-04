@@ -24,6 +24,11 @@ const handleClick = (
 
 const GameCard: React.FC<Props> = (props: Props) => {
   const { cardInfo, handleGameCardClick, gameNameLetter } = props;
+  const letterVisibilityStyle =
+    cardInfo.status === CardStatus.visible ||
+    cardInfo.status === CardStatus.matched
+      ? "letter-less-visible"
+      : "letter-visible";
   return (
     <div className='card-container'>
       <div
@@ -31,7 +36,9 @@ const GameCard: React.FC<Props> = (props: Props) => {
         onClick={() => handleClick(cardInfo, handleGameCardClick)}
       >
         {gameNameLetter && (
-          <div className='game-name-letter'>{gameNameLetter}</div>
+          <div className={`game-name-letter ${letterVisibilityStyle}`}>
+            {gameNameLetter}
+          </div>
         )}
         {(cardInfo.status === CardStatus.visible ||
           cardInfo.status === CardStatus.matched) && (

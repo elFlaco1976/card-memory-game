@@ -27,5 +27,17 @@
       position: absolute;
       line-height: 0;
     }
+
+    .letter-visible {
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .letter-less-visible {
+      color: rgba(255, 255, 255, 0.5);
+    }
   }
+}
+
+.card-container:hover {
+  cursor: pointer;
 }
